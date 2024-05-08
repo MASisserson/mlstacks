@@ -11,7 +11,6 @@ terraform {
     storage_account_name = "STORAGENAMEREPLACEME"
     container_name       = "CONTAINERNAMEREPLACEME"
     key                  = "prod.terraform.tfstate"
-    
   }
 
   required_version = ">= 0.14.8"
