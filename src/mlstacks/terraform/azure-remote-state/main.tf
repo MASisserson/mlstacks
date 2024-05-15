@@ -1,9 +1,9 @@
 provider "azurerm" {
-  features = {}
+  features {}
 }
 
 module "azurerm-remote-state" {
-  source  = "zenml-io/terraform-azurerm-remote-state"
+  source  = "zenml-io/remote-state/azurerm"
   version = "0.1.0"
 
   location       = var.location
