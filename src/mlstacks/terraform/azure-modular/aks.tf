@@ -1,15 +1,3 @@
-# DEPRECATION WARNING: This code has been deprecated
-# The maintained & current code can be found at src/mlstacks/terraform/
-# under the same relative location.
-
-data "azurerm_kubernetes_cluster" "cluster" {
-  name                = azurerm_kubernetes_cluster.aks.name
-  resource_group_name = azurerm_resource_group.rg.name
-  depends_on = [
-    azurerm_kubernetes_cluster.aks
-  ]
-}
-
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "${local.prefix}-${local.aks.cluster_name}"
   location            = azurerm_resource_group.rg.location
@@ -31,6 +19,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   tags = local.tags
+}
+
+data "azurerm_kubernetes_cluster" "cluster" {
+  name                = azurerm_kubernetes_cluster.aks.name
+  resource_group_name = azurerm_resource_group.rg.name
 }
 
 resource "kubernetes_namespace" "k8s-ns" {

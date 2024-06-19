@@ -1,11 +1,13 @@
-# DEPRECATION WARNING: This code has been deprecated
-# The maintained & current code can be found at src/mlstacks/terraform/
-# under the same relative location.
+data "azurerm_storage_account" "zenml-account" {
+  name                = azurerm_storage_account.zenml-account.name
+  resource_group_name = azurerm_resource_group.rg.name
+}
 
 resource "azurerm_storage_account" "zenml-account" {
   name                     = "${local.prefix}${local.blob_storage.account_name}"
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
+  account_kind             = "BlobStorage"
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
@@ -16,11 +18,6 @@ resource "azurerm_storage_container" "artifact-store" {
   name                  = "${local.prefix}-${local.blob_storage.container_name}"
   storage_account_name  = azurerm_storage_account.zenml-account.name
   container_access_type = "private"
-}
-
-data "azurerm_storage_account" "zenml-account" {
-  name                = azurerm_storage_account.zenml-account.name
-  resource_group_name = azurerm_resource_group.rg.name
 }
 
 resource "azurerm_role_assignment" "storage" {

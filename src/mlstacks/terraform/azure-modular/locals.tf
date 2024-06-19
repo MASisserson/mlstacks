@@ -1,50 +1,27 @@
-# DEPRECATION WARNING: This code has been deprecated
-# The maintained & current code can be found at src/mlstacks/terraform/
-# under the same relative location.
+resource "random_string" "unique" {
+  length  = 4
+  special = false
+  upper   = false
+}
 
 # config values to use across the module
 locals {
-  prefix = "demo"
-  region = "us-west1"
+  prefix = "zenml"
 
-  resource_group = {
-    name     = "zenml"
-    location = "West Europe"
-  }
   aks = {
-    cluster_name = "zenml-terraform-cluster"
-    # important to use 1.22 or above due to a bug with Istio in older versions
-    cluster_version      = "1.23.5"
-    orchestrator_version = "1.23.5"
-  }
-  vpc = {
-    name = "zenmlvpc"
+    cluster_name = "mycluster-${random_string.unique.result}"
   }
 
   blob_storage = {
-    account_name   = "zenmlaccount"
-    container_name = "zenmlartifactstore"
+    account_name   = var.blob_account_name == "" ? "storageaccount${random_string.unique.result}" : var.blob_account_name
+    container_name = var.blob_container_name == "" ? "artifactstore-${random_string.unique.result}" : var.blob_container_name
   }
 
-  acr = {
-    name = "zenmlcontainerregistry"
-  }
+  kubectl_context = "terraform-${local.prefix}-${local.aks.cluster_name}-${replace(substr(timestamp(), 0, 16), ":", "_")}"
 
-  key_vault = {
-    name = "zenmlsecrets"
-  }
-
-  seldon = {
-    name      = "seldon"
-    namespace = "seldon-system"
-  }
-  mlflow = {
-    artifact_Proxied_Access = "false"
-    artifact_Azure          = "true"
-    # if not set, the container created as part of the deployment will be used
-    artifact_Azure_Storage_Account_Name = ""
-    # this field is considered only when the storage account above is set
-    artifact_Azure_Container = ""
+  resource_group = {
+    location = var.resource_group_location
+    name     = var.resource_group_name == "" ? "resource-group-${random_string.unique.result}" : var.resource_group_name
   }
 
   tags = {

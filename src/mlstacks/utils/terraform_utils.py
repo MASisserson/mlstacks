@@ -308,12 +308,14 @@ def populate_tf_definitions(
             "terraform",
             "remote-state-terraform-config",
         )
+        print(f'tf: {remote_state_tf_config_subdir}')
         remote_state_terraform_config_subdir = Path(
             pkg_resources.resource_filename(
                 MLSTACKS_PACKAGE_NAME,
                 str(remote_state_tf_config_subdir),
             ),
         )
+        print(f'terraform: {remote_state_terraform_config_subdir}')
         bucket_name_without_prefix = remote_state_bucket.split("://", 1)[-1]
         # get the text of the terraform config file from
         # remote_state_terraform_config_subdir
@@ -326,10 +328,15 @@ def populate_tf_definitions(
                 "BUCKETNAMEREPLACEME",
                 bucket_name_without_prefix,
             ).replace("REGIONNAMEREPLACEME", region)
-        else:
+        elif provider == "gcp":
             tf_config = tf_config.replace(
                 "BUCKETNAMEREPLACEME",
                 bucket_name_without_prefix,
+            )
+        else:
+            tf_config = tf_config.replace(
+                "RESOURCENAMEREPLACEME",
+                
             )
 
         # write the string to destination_path using filename `terraform.tf`
