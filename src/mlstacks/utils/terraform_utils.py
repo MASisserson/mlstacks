@@ -335,7 +335,7 @@ def populate_tf_definitions(
             )
         else:
             tf_config = tf_config.replace(
-                "RESOURCENAMEREPLACEME",
+                "RESOURCEGROUPNAMEREPLACEME",
                 
             )
 

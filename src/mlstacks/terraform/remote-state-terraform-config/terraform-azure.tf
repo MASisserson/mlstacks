@@ -32,7 +32,7 @@ terraform {
   }
 
   backend "azurerm" {
-    resource_group_name  = "RESOURCENAMEREPLACEME"
+    resource_group_name  = "RESOURCEGROUPNAMEREPLACEME"
     storage_account_name = "STORAGENAMEREPLACEME"
     container_name       = "CONTAINERNAMEREPLACEME"
     key                  = "prod.terraform.tfstate"
